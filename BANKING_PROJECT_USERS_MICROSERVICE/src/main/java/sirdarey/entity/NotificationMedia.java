@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 public class NotificationMedia {
 	
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	int id;
-	String name;
+	private Integer id;
+	private String name;
 }

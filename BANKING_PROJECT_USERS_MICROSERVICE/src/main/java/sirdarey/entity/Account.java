@@ -23,7 +23,7 @@ public class Account {
 	@Column(unique = true, length = 10)
 	private Long accountNo;
 	
-	String accountName;
+	private String accountName;
 	
 	@Email (message = "Enter a valid Email", regexp = "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$")
 	private String email;
@@ -45,8 +45,9 @@ public class Account {
 	@JoinColumn(name = "fk_account_no", referencedColumnName = "accountNo")
 	private List<NotificationMedia> notificationMedia = new ArrayList<>();;
 	
-	private byte accLocked;  //UPDATABLE BY >=ADMINS 
+	private Byte accLocked;  //UPDATABLE BY >=ADMINS 
 	
+	private Integer transactionPIN;
 	
 	private String branchRegistered;
 	

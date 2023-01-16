@@ -48,6 +48,7 @@ public class AdditionSetterUtils {
 		accountDetails.setAccountName(accountName);
 		accountDetails.setAccLocked((byte) 0);
 		accountDetails.setBalance(0.0);
+		accountDetails.setTransactionPIN(1234);  //DEFAULT AND STATIC
 		if (userId != null)
 			accountDetails.setFk_user_id(userId);
 		accountDetails.setAccountNo(utils.generateRandom(9));

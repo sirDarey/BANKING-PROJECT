@@ -44,14 +44,14 @@ public class AccountController {
 	//UPDATE ACCOUNT BALANCE
 	
 	@RequestMapping
-	public double updateAccountBalance (@RequestHeader double amount, @PathVariable Long accountNo) throws CustomExceptions {
+	public double updateAccountBalance (@RequestHeader Double amount, @PathVariable Long accountNo) throws CustomExceptions {
 		return accountService.updateAccountBalance(amount, accountNo);
 	}
 	
 	//UPDATE ACCOUNT_LOCKED STATUS
 	
 	@RequestMapping("/updateaccountstatus")
-	public String updateAccountLockedStatus (@RequestParam boolean isLocked, @PathVariable Long accountNo) throws Exception{
+	public String updateAccountLockedStatus (@RequestParam Boolean isLocked, @PathVariable Long accountNo) throws Exception{
 		return accountService.updateAccountLockedStatus(isLocked, accountNo);
 	}
 }

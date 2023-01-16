@@ -1,11 +1,11 @@
 package sirdarey.service.impl;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import sirdarey.dto.CardDetails;
 import sirdarey.entity.Card;
@@ -16,6 +16,7 @@ import sirdarey.utils.AdditionSetterUtils;
 import sirdarey.utils.ExtractionUtils;
 
 @Service
+@Transactional
 public class CardServiceImpl implements CardService{
 
 	@Autowired
@@ -48,8 +49,29 @@ public class CardServiceImpl implements CardService{
 	}
 
 	@Override
-	public CardDetails getACardDetails(Long cardNo) throws SQLException {		
+	public CardDetails getACardDetails(Long cardNo){		
 		return cardRepo.findCardDetails(cardNo);		
+	}
+
+	@Override
+	public String updateCardExpiryStatus(Long cardNo) {
+		cardRepo.updateCardExpiryStatus(cardNo);
+		return "Expiry Status of Card Updated SUCCESSFULLY";
+	}
+
+	@Override
+	public String updateCardBlockedStatus(Boolean block, Long cardNo) {
+		int setStatus = 0;
+		String response;
+		
+		if (block) {
+			setStatus = 1;
+			response = "Card BLOCKED SUCCESSFULLY";
+		} else
+			response = "Card UNblocked SUCCESSFULLY";
+		
+		cardRepo.updateCardBlockedStatus((byte)setStatus, cardNo);
+		return response;
 	}
 	
 

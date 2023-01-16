@@ -16,7 +16,7 @@ public interface UserService {
 
 	UserDetailsForAdmins updateOnlyName(String newName, Long userId);
 
-	UserDetailsForAdmins updateEnableStatus(boolean enable, Long userId);
+	UserDetailsForAdmins updateEnableStatus(Boolean enable, Long userId);
 
 	UserDetailsForAdmins getUserByUserIdForAdmin(Long userId);
 	

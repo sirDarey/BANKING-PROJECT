@@ -65,7 +65,7 @@ public class UserController {
 	
 	@PutMapping ("/{userId}")
 	public UserDetailsForAdmins updateEnableStatus (
-			@RequestParam boolean enable, @PathVariable Long userId) throws Exception{
+			@RequestParam Boolean enable, @PathVariable Long userId) throws Exception{
 		return userService.updateEnableStatus(enable, userId);
 	}
 	

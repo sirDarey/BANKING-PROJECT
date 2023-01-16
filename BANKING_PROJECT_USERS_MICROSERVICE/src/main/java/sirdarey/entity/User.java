@@ -28,7 +28,6 @@ public class User {
 	private Long userId;
 	
 	@Size(min = 7,  message = "MINIMUM Length of 'fullName' is 7")
-	 
 	private String fullName;
 	
 	@Pattern (message = "Password must contain [a-z], [A-Z], [0-9] and at least one special character such as (\"!@#&()\")", 
@@ -48,6 +47,6 @@ public class User {
 	@JoinColumn(name = "fk_user_id", referencedColumnName = "userId")
 	private List <Account> ACCOUNTS = new ArrayList<>();
 	
-	private byte userEnabled;
+	private Byte userEnabled;
 
 }

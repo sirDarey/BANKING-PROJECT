@@ -1,6 +1,5 @@
 package sirdarey.service;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import sirdarey.dto.CardDetails;
@@ -12,5 +11,9 @@ public interface CardService {
 
 	CardDetails addCardToAccount(Card newCard, Long accountNo);
 
-	CardDetails getACardDetails(Long cardNo) throws SQLException;
+	CardDetails getACardDetails(Long cardNo);
+
+	String updateCardExpiryStatus(Long cardNo);
+
+	String updateCardBlockedStatus(Boolean block, Long cardNo);
 }

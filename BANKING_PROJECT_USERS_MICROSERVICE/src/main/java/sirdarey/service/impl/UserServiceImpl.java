@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public UserDetailsForAdmins updateEnableStatus(boolean enable, Long userId) {
+	public UserDetailsForAdmins updateEnableStatus(Boolean enable, Long userId) {
 		int setStatus;
 		
 		if (enable)

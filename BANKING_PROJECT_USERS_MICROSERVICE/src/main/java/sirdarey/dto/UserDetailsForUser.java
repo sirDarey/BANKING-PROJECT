@@ -11,6 +11,6 @@ public class UserDetailsForUser {
 	private Long userId;
 	private String fullName;
 	private Long bvn;
-	private byte userEnabled;	
+	private Byte userEnabled;	
 	private List<UserAccountDetails> accounts;		
 }

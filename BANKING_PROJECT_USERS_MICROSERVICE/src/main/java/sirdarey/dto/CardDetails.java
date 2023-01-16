@@ -10,14 +10,14 @@ public class CardDetails {
 	
 	private Long cardNo;
 	private Long fk_account_no;
-	private int cvv;
+	private Integer cvv;
 	private String cardHolder;
 	private String cardType;
 	private Date expiryDate;
-	private byte isBlocked;
-	private byte isExpired;
+	private Byte isBlocked;
+	private Byte isExpired;
 	
-	public CardDetails(Long cardNo, Long fk_account_no, int cvv, Date expiryDate, byte isBlocked, byte isExpired) {
+	public CardDetails(Long cardNo, Long fk_account_no, Integer cvv, Date expiryDate, Byte isBlocked, Byte isExpired) {
 		
 		this.cardNo = cardNo;
 		this.fk_account_no = fk_account_no;

@@ -17,7 +17,7 @@ public class UserAccountDetails {
 	private Double balance;
 	private String accountManagerName;
 	private List<NotificationMedia> notificationMedia;
-	private byte accLocked;
+	private Byte accLocked;
 	private String branchRegistered;
 	private String accountType;
 	private List<CardDetails> cards;

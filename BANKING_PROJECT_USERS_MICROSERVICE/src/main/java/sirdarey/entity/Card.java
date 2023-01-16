@@ -19,25 +19,25 @@ public class Card {
 	private Long cardNo;
 	
 	@Column(length = 3)
-	private int cvv;
+	private Integer cvv;
 	
 	private Long fk_account_no;
 	
 	private String cardHolder;
 	
 	@Column(length = 4)
-	private int cardPIN;
+	private Integer cardPIN;
 	
 	private String cardType;
 	
 	@JsonFormat(pattern="dd-MM-yyyy", shape = Shape.STRING)
 	private Date expiryDate;
 	
-	private byte isBlocked;
-	private byte isExpired;
+	private Byte isBlocked;
+	private Byte isExpired;
 
-	public Card(Long cardNo, int cvv, Long fk_account_no, String cardType, Date expiryDate,
-			byte isBlocked, byte isExpired) {
+	public Card(Long cardNo, Integer cvv, Long fk_account_no, String cardType, Date expiryDate,
+			Byte isBlocked, Byte isExpired) {
 
 		this.cardNo = cardNo;
 		this.cvv = cvv;

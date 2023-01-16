@@ -15,8 +15,8 @@ public interface AccountService {
 
 	UserAccountDetails updateAccountDetails(UpdateAccountRequest updateAccountRequest, Long accountNo);
 
-	double updateAccountBalance(double amount, Long accountNo) throws CustomExceptions;
+	Double updateAccountBalance(Double amount, Long accountNo) throws CustomExceptions;
 
-	String updateAccountLockedStatus(boolean isLocked, Long accountNo);
+	String updateAccountLockedStatus(Boolean isLocked, Long accountNo);
 
 }

@@ -65,7 +65,7 @@ public class AccountServiceImpl implements AccountService{
 	}
 
 	@Override
-	public double updateAccountBalance(double amount, Long accountNo) throws CustomExceptions {
+	public Double updateAccountBalance(Double amount, Long accountNo) throws CustomExceptions {
 		
 		double initialBalance = accountRepo.getInitialBalance(accountNo);
 		double finalBalance = amount + initialBalance;
@@ -78,7 +78,7 @@ public class AccountServiceImpl implements AccountService{
 	}
 
 	@Override
-	public String updateAccountLockedStatus(boolean isLocked, Long accountNo) {
+	public String updateAccountLockedStatus(Boolean isLocked, Long accountNo) {
 		int setStatus; 
 		String response;
 		

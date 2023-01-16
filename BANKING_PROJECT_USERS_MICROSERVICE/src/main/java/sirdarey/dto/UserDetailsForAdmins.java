@@ -11,7 +11,7 @@ public class UserDetailsForAdmins {
 	private Long userId;
 	private String fullName;
 	private Long bvn;
-	private byte userEnabled;
+	private Byte userEnabled;
 	private String role;
 	private String registeredBy;
 	private List<UserAccountDetails> accounts;		
