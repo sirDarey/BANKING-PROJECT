@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import sirdarey.TransactionsLayer.AirtimeRequestDTO;
 import sirdarey.TransactionsLayer.GenericResponse;
 import sirdarey.TransactionsLayer.TransactionDetails;
-import sirdarey.TransactionsLayer.TransactionsRepo;
 import sirdarey.TransactionsLayer.TransactionsResponseDTO;
 import sirdarey.repo.AccountRepo;
 
@@ -18,7 +17,6 @@ import sirdarey.repo.AccountRepo;
 @Transactional
 public class AirtimeRequestService {
 
-	@Autowired private TransactionsRepo transactionsRepo;
 	@Autowired private AccountRepo accountRepo;
 	
 	
@@ -29,7 +27,7 @@ public class AirtimeRequestService {
 		Long entryPhoneNo = airAirtimeRequest.getPhoneNo();
 		Integer transactionPIN = airAirtimeRequest.getTransactionPIN();
 		
-		GenericResponse requiredAccountDetails = transactionsRepo.getDetailsForAirtimeRequest(accountNo);
+		GenericResponse requiredAccountDetails = accountRepo.getDetailsForAirtimeRequest(accountNo);
 		
 		if (requiredAccountDetails == null) 
 			return ResponseEntity.status(200).body(new TransactionsResponseDTO("Account NOT FOUND", null));

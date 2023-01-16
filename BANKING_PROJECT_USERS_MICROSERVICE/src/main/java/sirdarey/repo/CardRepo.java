@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import sirdarey.TransactionsLayer.GenericResponse;
 import sirdarey.dto.CardDetails;
 import sirdarey.entity.Card;
 
@@ -26,5 +27,11 @@ public interface CardRepo extends JpaRepository<Card, Long>{
 	@Query(nativeQuery = true,
 			value = "UPDATE card SET is_blocked = ?1 WHERE card_no =?2")
 	void updateCardBlockedStatus(byte setStatus, Long cardNo);
+
+
+	@Query (value = "select new sirdarey.TransactionsLayer.GenericResponse"
+			+ "(c.fk_account_no, c.cardPIN, c.cardHolder, c.isBlocked, c.isExpired) "
+			+ "from Card c where c.cardNo=?1")
+	GenericResponse getCardDetailsForWithdrawal(Long cardNo);
 	
 }

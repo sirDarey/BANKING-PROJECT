@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import sirdarey.TransactionsLayer.DepositRequestDTO;
 import sirdarey.TransactionsLayer.GenericResponse;
 import sirdarey.TransactionsLayer.TransactionDetails;
-import sirdarey.TransactionsLayer.TransactionsRepo;
 import sirdarey.TransactionsLayer.TransactionsResponseDTO;
 import sirdarey.repo.AccountRepo;
 
@@ -18,7 +17,6 @@ import sirdarey.repo.AccountRepo;
 @Transactional
 public class DepositRequestService {
 
-	@Autowired private TransactionsRepo transactionsRepo;
 	@Autowired private AccountRepo accountRepo;
 	
 	
@@ -28,7 +26,7 @@ public class DepositRequestService {
 		String accounName = depositRequest.getAccountName();
 		Double depositAmount = depositRequest.getTransactionAmount();
 		
-		GenericResponse requiredAccountDetails = transactionsRepo.getDetailsForDeposit(accountNo);		
+		GenericResponse requiredAccountDetails = accountRepo.getDetailsForDeposit(accountNo);		
 		
 		if (requiredAccountDetails == null) 
 			return ResponseEntity.status(200).body(new TransactionsResponseDTO("ERROR: ACCOUNT NOT FOUND", null));

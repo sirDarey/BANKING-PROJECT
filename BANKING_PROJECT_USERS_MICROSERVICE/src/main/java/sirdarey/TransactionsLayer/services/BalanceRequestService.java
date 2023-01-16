@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import sirdarey.TransactionsLayer.BalanceRequestDTO;
 import sirdarey.TransactionsLayer.GenericResponse;
 import sirdarey.TransactionsLayer.TransactionDetails;
-import sirdarey.TransactionsLayer.TransactionsRepo;
 import sirdarey.TransactionsLayer.TransactionsResponseDTO;
 
 import sirdarey.repo.AccountRepo;
@@ -19,7 +18,6 @@ import sirdarey.repo.AccountRepo;
 @Transactional
 public class BalanceRequestService {
 
-	@Autowired private TransactionsRepo transactionsRepo;
 	@Autowired private AccountRepo accountRepo;
 	
 	
@@ -28,7 +26,7 @@ public class BalanceRequestService {
 		Long accountNo = balanceRequest.getAccountNo();
 		Integer transactionPIN = balanceRequest.getTransactionPIN();
 		
-		GenericResponse requiredAccountDetails = transactionsRepo.getDetailsForBalanceCheck(accountNo);		
+		GenericResponse requiredAccountDetails = accountRepo.getDetailsForBalanceCheck(accountNo);		
 		
 		if (requiredAccountDetails == null) 
 			return ResponseEntity.status(200).body(new TransactionsResponseDTO("ERROR: ACCOUNT NOT FOUND", null));

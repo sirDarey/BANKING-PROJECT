@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import sirdarey.TransactionsLayer.GenericResponse;
 import sirdarey.entity.Account;
 
 public interface AccountRepo extends JpaRepository<Account, Long>{	
@@ -43,4 +44,39 @@ public interface AccountRepo extends JpaRepository<Account, Long>{
 	@Query(nativeQuery = true, 
 			value = "SELECT account_name FROM account WHERE account_no = ?1")
 	String getAccountName(Long accountNo);
+	
+	
+
+	/***************** QUERIES FOR TRANSACTION LAYER ********************************/
+	
+	@Query (value = "select new sirdarey.TransactionsLayer.GenericResponse"
+			+ "(a.accountName, a.balance, a.transactionPIN, a.phoneNo) "
+			+ "from Account a where a.accountNo=?1")
+	GenericResponse getDetailsForAirtimeRequest(Long accountNo);
+
+	
+	@Query (value = "select new sirdarey.TransactionsLayer.GenericResponse"
+			+ "(a.accountName, a.balance, a.transactionPIN) "
+			+ "from Account a where a.accountNo=?1")
+	GenericResponse getDetailsForBalanceCheck(Long accountNo);
+
+	
+	@Query (value = "select new sirdarey.TransactionsLayer.GenericResponse"
+			+ "(a.balance, a.accountName) from Account a where a.accountNo=?1")
+	GenericResponse getDetailsForDeposit(Long accountNo);
+
+
+	@Query (value = "select new sirdarey.TransactionsLayer.GenericResponse"
+			+ "(a.accountName, a.balance, a.transactionPIN) "
+			+ "from Account a where a.accountNo=?1")
+	GenericResponse getSenderDetailsForTransfer(Long senderAccountNo);
+
+	
+	@Query (value = "select new sirdarey.TransactionsLayer.GenericResponse"
+			+ "(a.balance, a.accountName) from Account a where a.accountNo=?1")
+	GenericResponse getReceiverDetailsForTransfer(Long receiverAccountNo);
+
+	@Query (value = "select new sirdarey.TransactionsLayer.GenericResponse"
+			+ "(a.accountType, a.balance) from Account a where a.accountNo=?1")
+	GenericResponse getAccountDetailsForWithdrawal(Long fk_account_no);
 }

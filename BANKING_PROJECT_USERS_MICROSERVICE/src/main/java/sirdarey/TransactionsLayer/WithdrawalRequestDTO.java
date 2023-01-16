@@ -1,4 +1,4 @@
-package sirdarey.dto;
+package sirdarey.TransactionsLayer;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

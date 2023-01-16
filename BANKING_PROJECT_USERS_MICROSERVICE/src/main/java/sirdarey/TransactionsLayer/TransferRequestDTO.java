@@ -1,10 +1,10 @@
-package sirdarey.dto;
+package sirdarey.TransactionsLayer;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data @AllArgsConstructor @NoArgsConstructor
+@Getter @AllArgsConstructor @NoArgsConstructor
 public class TransferRequestDTO {
 
 	private Long senderAccountNo;

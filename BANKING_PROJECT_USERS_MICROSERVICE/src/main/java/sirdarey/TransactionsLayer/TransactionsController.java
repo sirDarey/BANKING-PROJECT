@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import sirdarey.TransactionsLayer.services.AirtimeRequestService;
 import sirdarey.TransactionsLayer.services.BalanceRequestService;
 import sirdarey.TransactionsLayer.services.DepositRequestService;
+import sirdarey.TransactionsLayer.services.TransferRequestService;
+import sirdarey.TransactionsLayer.services.WithdrawalRequestService;
 
 @RestController
 @RequestMapping("/bank/transactions")
@@ -18,6 +20,8 @@ public class TransactionsController {
 	@Autowired private AirtimeRequestService airtimeRequestService;
 	@Autowired private BalanceRequestService balanceRequestService;
 	@Autowired private DepositRequestService depositRequestService;
+	@Autowired private TransferRequestService transferRequestService;
+	@Autowired private WithdrawalRequestService withdrawalRequestService;
 	
 	//PURCHASE AIRTIME (SELF OR THIRD PARTY)
 	
@@ -42,4 +46,19 @@ public class TransactionsController {
 		return depositRequestService.deposit(depositRequest);
 	}
 	
+	
+	// TRANSFER FUNDS 
+	
+	@PostMapping("/transfer") 
+	public ResponseEntity<TransactionsResponseDTO []> transfer (@RequestBody TransferRequestDTO transferRequest)  {
+		return transferRequestService.transfer(transferRequest);
+	}
+	
+	
+	//WITHDRAW FUNDS
+	
+	@PostMapping("/withdrawal") 
+	public ResponseEntity<TransactionsResponseDTO> withdrawal (@RequestBody WithdrawalRequestDTO withdrawalRequest)  {
+		return withdrawalRequestService.withdrawal(withdrawalRequest);
+	}
 }
