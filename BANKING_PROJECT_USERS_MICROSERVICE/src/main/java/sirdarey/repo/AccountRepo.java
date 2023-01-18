@@ -33,13 +33,13 @@ public interface AccountRepo extends JpaRepository<Account, Long>{
 	@Modifying
 	@Query(nativeQuery = true, 
 			value = "UPDATE account SET balance = ?1 WHERE account_no = ?2")
-	void updateAccountBalance(double finalBalance, Long accountNo);
+	void updateAccountBalance(Double finalBalance, Long accountNo);
 	
 
 	@Modifying
 	@Query(nativeQuery = true, 
 			value = "UPDATE account SET acc_locked = ?1 WHERE account_no = ?2")
-	void updateAccountLockedStatus(byte setStatus, Long accountNo);
+	int updateAccountLockedStatus(Byte setStatus, Long accountNo);
 
 	@Query(nativeQuery = true, 
 			value = "SELECT account_name FROM account WHERE account_no = ?1")

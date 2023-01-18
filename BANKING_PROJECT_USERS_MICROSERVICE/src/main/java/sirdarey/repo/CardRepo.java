@@ -20,15 +20,21 @@ public interface CardRepo extends JpaRepository<Card, Long>{
 	@Modifying
 	@Query(nativeQuery = true,
 			value = "UPDATE card SET is_expired = 1 WHERE card_no =?1")
-	void updateCardExpiryStatus(Long cardNo);
+	int updateCardExpiryStatus(Long cardNo);
 
 	
 	@Modifying
 	@Query(nativeQuery = true,
 			value = "UPDATE card SET is_blocked = ?1 WHERE card_no =?2")
-	void updateCardBlockedStatus(byte setStatus, Long cardNo);
+	int  updateCardBlockedStatus(byte setStatus, Long cardNo);
 
 
+	
+	
+	
+	/**************************QUERIES FOR TRANSACTIONS LAYER ***************/
+	
+	
 	@Query (value = "select new sirdarey.TransactionsLayer.GenericResponse"
 			+ "(c.fk_account_no, c.cardPIN, c.cardHolder, c.isBlocked, c.isExpired) "
 			+ "from Card c where c.cardNo=?1")

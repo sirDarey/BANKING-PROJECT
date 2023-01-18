@@ -2,18 +2,21 @@ package sirdarey.service;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
+
 import sirdarey.dto.CardDetails;
+import sirdarey.dto.CardDetailsResponse;
 import sirdarey.entity.Card;
 
 public interface CardService {
  
 	List <CardDetails> getAccountCards (List<Card> getCards);
 
-	CardDetails addCardToAccount(Card newCard, Long accountNo);
+	ResponseEntity<CardDetailsResponse> addCardToAccount(Card newCard, Long accountNo);
 
-	CardDetails getACardDetails(Long cardNo);
+	ResponseEntity<CardDetailsResponse> getACardDetails(Long cardNo);
 
-	String updateCardExpiryStatus(Long cardNo);
+	ResponseEntity<CardDetailsResponse> updateCardExpiryStatus(Long cardNo);
 
-	String updateCardBlockedStatus(Boolean block, Long cardNo);
+	ResponseEntity<CardDetailsResponse> updateCardBlockedStatus(Boolean block, Long cardNo);
 }

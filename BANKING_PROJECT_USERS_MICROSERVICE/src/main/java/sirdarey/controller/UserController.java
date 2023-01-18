@@ -1,23 +1,23 @@
 package sirdarey.controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import sirdarey.dto.UserDetailsForUser;
+import sirdarey.dto.UserDetailsResponse;
 import sirdarey.exceptions.CustomExceptions;
 import sirdarey.dto.AddAccountToUserRequest;
 import sirdarey.dto.NewUserRequest;
-import sirdarey.dto.UserDetailsForAdmins;
 import sirdarey.service.UserService;
 import sirdarey.service.impl.NewUserRequestService;
 
@@ -40,22 +40,22 @@ public class UserController {
 	//GET User By UserID For Admin  
 	
 	@GetMapping("/{userId}/admin")
-	public UserDetailsForAdmins getUserByUserIdForAdmin (@PathVariable Long userId) throws Exception{
+	public ResponseEntity<UserDetailsResponse>  getUserByUserIdForAdmin (@PathVariable Long userId) {
 		return userService.getUserByUserIdForAdmin(userId); 
 	}
 
 	//CREATE a New User
 	
 	@PostMapping
-	public ResponseEntity<UserDetailsForAdmins> addNewUser (
-			@RequestBody NewUserRequest newUser) throws CustomExceptions, IOException {
-		return ResponseEntity.status(201).body(newUserRequestService.addUser(newUser));
+	public ResponseEntity<UserDetailsResponse> addNewUser (
+			@RequestBody NewUserRequest newUser) throws CustomExceptions, IOException, SQLException {
+		return newUserRequestService.addUser(newUser);
 	}
 	
 	//UPDATE NAME in UserDetails and in ALL Accounts
 	
-	@PutMapping ("/{userId}/updateonlyname")
-	public UserDetailsForAdmins updateOnlyName (
+	@GetMapping ("/{userId}/updateonlyname")
+	public ResponseEntity<UserDetailsResponse> updateOnlyName (
 			@RequestParam String newName, @PathVariable Long userId) throws Exception{
 		return userService.updateOnlyName(newName, userId);
 	}
@@ -63,8 +63,8 @@ public class UserController {
 	
 	//DISABLE/ENABLE USER 
 	
-	@PutMapping ("/{userId}")
-	public UserDetailsForAdmins updateEnableStatus (
+	@GetMapping ("/{userId}/enablestatus")
+	public ResponseEntity<UserDetailsResponse> updateEnableStatus (
 			@RequestParam Boolean enable, @PathVariable Long userId) throws Exception{
 		return userService.updateEnableStatus(enable, userId);
 	}
@@ -72,11 +72,10 @@ public class UserController {
 	//ADD NEW ACCOUNT TO  A USER
 	
 	@PostMapping("/{userId}/newaccount")
-	public ResponseEntity<UserDetailsForAdmins> addNewAccountToUser (
+	public ResponseEntity<UserDetailsResponse> addNewAccountToUser (
 			@RequestBody AddAccountToUserRequest addAccountToUserRequest, @PathVariable Long userId) throws CustomExceptions, IOException {
 		
-		return ResponseEntity.status(201).body(
-				userService.addNewAccountToUser(addAccountToUserRequest, userId));
+		return userService.addNewAccountToUser(addAccountToUserRequest, userId);
 	}
 	
 }

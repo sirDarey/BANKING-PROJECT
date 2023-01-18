@@ -1,10 +1,13 @@
 package sirdarey.service;
 
 import java.io.IOException;
+import java.sql.SQLException;
+
+import org.springframework.http.ResponseEntity;
 
 import sirdarey.dto.AddAccountToUserRequest;
-import sirdarey.dto.UserDetailsForAdmins;
 import sirdarey.dto.UserDetailsForUser;
+import sirdarey.dto.UserDetailsResponse;
 import sirdarey.entity.User;
 import sirdarey.exceptions.CustomExceptions;
 
@@ -12,14 +15,14 @@ public interface UserService {
 
 	UserDetailsForUser getUserByUserIdForUser(Long userId);
 
-	UserDetailsForAdmins addUser(User newUser);
+	ResponseEntity<UserDetailsResponse> addUser(User newUser) throws SQLException;
 
-	UserDetailsForAdmins updateOnlyName(String newName, Long userId);
+	ResponseEntity<UserDetailsResponse> updateOnlyName(String newName, Long userId);
 
-	UserDetailsForAdmins updateEnableStatus(Boolean enable, Long userId);
+	ResponseEntity<UserDetailsResponse> updateEnableStatus(Boolean enable, Long userId);
 
-	UserDetailsForAdmins getUserByUserIdForAdmin(Long userId);
+	ResponseEntity<UserDetailsResponse> getUserByUserIdForAdmin(Long userId);
 	
-	UserDetailsForAdmins addNewAccountToUser(AddAccountToUserRequest addAccountToUserRequest, Long userId) throws CustomExceptions, IOException;
+	ResponseEntity<UserDetailsResponse> addNewAccountToUser(AddAccountToUserRequest addAccountToUserRequest, Long userId) throws CustomExceptions, IOException;
 
 }

@@ -1,15 +1,17 @@
 package sirdarey.service.impl;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import jakarta.servlet.http.HttpServletResponse;
 import sirdarey.dto.NewUserRequest;
-import sirdarey.dto.UserDetailsForAdmins;
+import sirdarey.dto.UserDetailsResponse;
 import sirdarey.entity.Account;
 import sirdarey.entity.Card;
 import sirdarey.entity.NotificationMedia;
@@ -31,7 +33,7 @@ public class NewUserRequestService {
 	@Autowired
 	private HttpServletResponse response;
 	
-	public UserDetailsForAdmins addUser(NewUserRequest newUser) throws CustomExceptions, IOException {
+	public ResponseEntity<UserDetailsResponse> addUser(NewUserRequest newUser) throws CustomExceptions, IOException, SQLException {
 		
 		User userDetails = newUser.getUser();
 		List <NotificationMedia> notificationMedia = newUser.getNotificationMedia();
@@ -46,9 +48,9 @@ public class NewUserRequestService {
 		userDetails.setUserEnabled((byte) 0);
 		userDetails.setACCOUNTS(Arrays.asList(accountDetails));
 		
-		UserDetailsForAdmins registrationResponse = userService.addUser(userDetails);
+		ResponseEntity<UserDetailsResponse> registrationResponse = userService.addUser(userDetails);
 		
-		registrationResponse.getAccounts().forEach(account -> {
+		registrationResponse.getBody().getUserDetails().getAccounts().forEach(account -> {
 			account.getCards().forEach(card -> {
 				card.setFk_account_no(accountDetails.getAccountNo());
 			});

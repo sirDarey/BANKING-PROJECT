@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import sirdarey.dto.AccountDetailsResponse;
 import sirdarey.dto.UpdateAccountRequest;
 import sirdarey.dto.UserAccountDetails;
 import sirdarey.entity.Account;
-import sirdarey.exceptions.CustomExceptions;
 import sirdarey.repo.AccountRepo;
 import sirdarey.service.AccountService;
 import sirdarey.service.CardService;
@@ -42,44 +43,59 @@ public class AccountServiceImpl implements AccountService{
 	}
 
 	@Override
-	public UserAccountDetails getAnAccountDetails(Long accountNo) {
+	public ResponseEntity<AccountDetailsResponse> getAnAccountDetails(Long accountNo) {
 		
-			Account accountDetails = accountRepo.findById(accountNo).get();
-			return extractionUtils.extractAccountDetails(
-					accountDetails, cardService);
+		Account accountDetails  = null;
+		try {
+			accountDetails = accountRepo.findById(accountNo).get();
+		}catch (Exception e) {
+			return ResponseEntity.status(404).body(new AccountDetailsResponse(e.getMessage(), null));
+		}
 		
+		return ResponseEntity.ok()
+				.body(new AccountDetailsResponse("Account Details Retrieved SUCCESSFULLY",
+						extractionUtils.extractAccountDetails(accountDetails, cardService)));		
 	}
 
 	@Override
-	public UserAccountDetails updateAccountDetails(UpdateAccountRequest updateAccountRequest, Long accountNo) {
+	public ResponseEntity<AccountDetailsResponse> updateAccountDetails(UpdateAccountRequest updateAccountRequest, Long accountNo) {
 	
-		accountRepo.updateAccountDetails(
-							updateAccountRequest.getEmail(),
-							updateAccountRequest.getPhoneNo(),
-							updateAccountRequest.getAccountManagerName(),
-							accountNo);
+		Account accountDetails  = null;
+		try {
+			accountRepo.updateAccountDetails(
+					updateAccountRequest.getEmail(),
+					updateAccountRequest.getPhoneNo(),
+					updateAccountRequest.getAccountManagerName(),
+					accountNo);
+
+			accountDetails = accountRepo.findById(accountNo).get();
+			
+		}catch (Exception e) {
+			return ResponseEntity.status(404).body(new AccountDetailsResponse(e.getMessage(), null));
+		}
 		
-		Account accountDetails = accountRepo.findById(accountNo).get();
-		return extractionUtils.extractAccountDetails(
-				accountDetails, cardService);
+		return ResponseEntity.ok()
+				.body(new AccountDetailsResponse("Account Updated SUCCESSFULLY",
+						extractionUtils.extractAccountDetails(accountDetails, cardService)));
 	}
 
-	@Override
-	public Double updateAccountBalance(Double amount, Long accountNo) throws CustomExceptions {
-		
-		double initialBalance = accountRepo.getInitialBalance(accountNo);
-		double finalBalance = amount + initialBalance;
-		
-		if (finalBalance < 0.0) 
-			throw new CustomExceptions("You have Insufficient Funds for this transaction");
-		
-		accountRepo.updateAccountBalance(finalBalance, accountNo);
-		return finalBalance;
-	}
+//	@Override
+//	public Double updateAccountBalance(Double amount, Long accountNo) throws CustomExceptions {
+//		
+//		double initialBalance = accountRepo.getInitialBalance(accountNo);
+//		double finalBalance = amount + initialBalance;
+//		
+//		if (finalBalance < 0.0) 
+//			throw new CustomExceptions("You have Insufficient Funds for this transaction");
+//		
+//		accountRepo.updateAccountBalance(finalBalance, accountNo);
+//		return finalBalance;
+//	}
 
 	@Override
-	public String updateAccountLockedStatus(Boolean isLocked, Long accountNo) {
-		int setStatus; 
+	public ResponseEntity<AccountDetailsResponse> updateAccountLockedStatus(Boolean isLocked, Long accountNo) {
+		
+		Byte setStatus; 
 		String response;
 		
 		if (isLocked) {
@@ -90,8 +106,13 @@ public class AccountServiceImpl implements AccountService{
 			response = "Account UNlocked SUCCESSFULLY";
 		}
 		
-		accountRepo.updateAccountLockedStatus((byte)setStatus, accountNo);
-		return response;
+		int rowUpdated = accountRepo.updateAccountLockedStatus(setStatus, accountNo);
+		if (rowUpdated == 0)
+			return ResponseEntity.status(404)
+					.body(new AccountDetailsResponse("Account NOT FOUND", null));
+		
+		return ResponseEntity.ok()
+				.body(new AccountDetailsResponse("SUCCESS", response));
 	}
 
 

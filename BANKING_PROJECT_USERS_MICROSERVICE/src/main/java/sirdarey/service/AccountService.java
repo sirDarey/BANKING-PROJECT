@@ -2,21 +2,23 @@ package sirdarey.service;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
+
+import sirdarey.dto.AccountDetailsResponse;
 import sirdarey.dto.UpdateAccountRequest;
 import sirdarey.dto.UserAccountDetails;
 import sirdarey.entity.Account;
-import sirdarey.exceptions.CustomExceptions;
 
 public interface AccountService {
 
 	List <UserAccountDetails> getUserAccounts (List<Account> getAccounts);
 
-	UserAccountDetails getAnAccountDetails(Long accountNo);
+	ResponseEntity<AccountDetailsResponse> getAnAccountDetails(Long accountNo);
 
-	UserAccountDetails updateAccountDetails(UpdateAccountRequest updateAccountRequest, Long accountNo);
+	ResponseEntity<AccountDetailsResponse> updateAccountDetails(UpdateAccountRequest updateAccountRequest, Long accountNo);
 
-	Double updateAccountBalance(Double amount, Long accountNo) throws CustomExceptions;
+	//Double updateAccountBalance(Double amount, Long accountNo) throws CustomExceptions;
 
-	String updateAccountLockedStatus(Boolean isLocked, Long accountNo);
+	ResponseEntity<AccountDetailsResponse> updateAccountLockedStatus(Boolean isLocked, Long accountNo);
 
 }

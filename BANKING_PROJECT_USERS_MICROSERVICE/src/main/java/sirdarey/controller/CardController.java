@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import sirdarey.dto.CardDetails;
+import sirdarey.dto.CardDetailsResponse;
 import sirdarey.entity.Card;
 import sirdarey.service.CardService;
 
@@ -25,14 +25,14 @@ public class CardController {
 	//ADD A NEW CARD TO AN ACCOUNT
 	
 	@PostMapping("/{accountNo}")
-	public ResponseEntity<CardDetails> addCardToAccount(@RequestBody Card newCard, @PathVariable Long accountNo) throws Exception{
-		return ResponseEntity.status(201).body(cardService.addCardToAccount(newCard, accountNo));
+	public ResponseEntity<CardDetailsResponse> addCardToAccount(@RequestBody Card newCard, @PathVariable Long accountNo) throws Exception{
+		return cardService.addCardToAccount(newCard, accountNo);
 	}
 	
 	//VIEW A CARD DETAILS
 	
 	@GetMapping("/{cardNo}")
-	public CardDetails getACardDetails (@PathVariable Long cardNo) throws Exception{
+	public ResponseEntity<CardDetailsResponse> getACardDetails (@PathVariable Long cardNo) throws Exception{
 		return cardService.getACardDetails(cardNo);
 	}
 	
@@ -40,7 +40,7 @@ public class CardController {
 	//UPDATE EXPIRY STATUS
 	
 	@PutMapping("/{cardNo}/expiry")
-	public String updateCardExpiryStatus (@PathVariable Long cardNo)throws Exception{
+	public ResponseEntity<CardDetailsResponse> updateCardExpiryStatus (@PathVariable Long cardNo)throws Exception{
 		return cardService.updateCardExpiryStatus(cardNo);
 	}
 	
@@ -48,7 +48,7 @@ public class CardController {
 	//UPDATE BLOCKED STATUS
 	
 	@PutMapping("/{cardNo}/block")
-	public String updateCardBlockedStatus (@RequestParam Boolean block, @PathVariable Long cardNo) throws Exception {
+	public ResponseEntity<CardDetailsResponse> updateCardBlockedStatus (@RequestParam Boolean block, @PathVariable Long cardNo) throws Exception {
 		return cardService.updateCardBlockedStatus(block, cardNo);
 	}
 }

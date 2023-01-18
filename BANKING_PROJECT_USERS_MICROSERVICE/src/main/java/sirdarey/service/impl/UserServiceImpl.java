@@ -4,13 +4,14 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.servlet.http.HttpServletResponse;
 import sirdarey.dto.AddAccountToUserRequest;
-import sirdarey.dto.UserDetailsForAdmins;
 import sirdarey.dto.UserDetailsForUser;
+import sirdarey.dto.UserDetailsResponse;
 import sirdarey.entity.Account;
 import sirdarey.entity.Card;
 import sirdarey.entity.NotificationMedia;
@@ -49,62 +50,106 @@ public class UserServiceImpl implements UserService{
 
 
 	@Override
-	public UserDetailsForAdmins getUserByUserIdForAdmin(Long userId) {
+	public ResponseEntity<UserDetailsResponse> getUserByUserIdForAdmin(Long userId) {
+		User user  = null;
+		try {
+			user = userRepo.findById(userId).get();
+		}catch (Exception e) {
+			return ResponseEntity.status(200).body(new UserDetailsResponse(e.getMessage(), null));
+		}
 		
-		User user = userRepo.findById(userId).get();		
-		return extractionUtils.extractUserDetailsForAdmin(user, accountService);
+		return ResponseEntity.ok()
+				.body(new UserDetailsResponse("User Details Retrieved SUCCESSFULLY",
+						extractionUtils.extractUserDetailsForAdmin(user, accountService)));
 	}
 	
 	@Override
-	public UserDetailsForAdmins addUser(User userDetails) {		
+	public ResponseEntity<UserDetailsResponse> addUser(User userDetails) {	
 		
-		User user = userRepo.save(userDetails);		
-		return extractionUtils.extractUserDetailsForAdmin(user, accountService);
+		User user  = null;
+		try {
+			user = userRepo.save(userDetails);
+		}catch (Exception e) {
+			return ResponseEntity.status(200).body(new UserDetailsResponse(e.getMessage(), null));
+		}
+		
+		return ResponseEntity.ok()
+				.body(new UserDetailsResponse("Registered New User SUCCESSFULLY",
+						extractionUtils.extractUserDetailsForAdmin(user, accountService)));
 	}
 	
 	@Override
-	public UserDetailsForAdmins updateOnlyName(String newName, Long userId) {
-		userRepo.updateOnlyName(newName, userId);
-		accountRepo.updateAllAccountsNames (newName, userId);
-		User user = userRepo.findById(userId).get();
-		return extractionUtils.extractUserDetailsForAdmin(user, accountService);
+	public ResponseEntity<UserDetailsResponse> updateOnlyName(String newName, Long userId) {
+		User user = null;
+		
+		try {
+			userRepo.updateOnlyName(newName, userId);
+			accountRepo.updateAllAccountsNames (newName, userId);
+			user = userRepo.findById(userId).get();
+		}catch (Exception e) {
+			return ResponseEntity.status(200).body(new UserDetailsResponse(e.getMessage(), null));
+		}
+		
+		return ResponseEntity.ok()
+				.body(new UserDetailsResponse("User's Name Updated SUCCESSFULLY",
+						extractionUtils.extractUserDetailsForAdmin(user, accountService)));
 	}
 
 	@Override
-	public UserDetailsForAdmins updateEnableStatus(Boolean enable, Long userId) {
-		int setStatus;
-		
-		if (enable)
+	public ResponseEntity<UserDetailsResponse> updateEnableStatus(Boolean enable, Long userId) {
+		int setStatus = 0;
+		String response;
+		User user = null;
+		if (enable) {
 			setStatus = 1;
-		else
-			setStatus = 0;
+			response = "User ENABLED SUCCESSFULLY";
+		} else
+			response = "User DISabled SUCCESSFULLY";
 		
-		userRepo.updateEnableStatus(setStatus, userId);
-		User user = userRepo.findById(userId).get();
-		return extractionUtils.extractUserDetailsForAdmin(user, accountService);
+		try {
+			userRepo.updateEnableStatus(setStatus, userId);
+			user = userRepo.findById(userId).get();
+		}catch (Exception e) {
+			return ResponseEntity.ok().body(new UserDetailsResponse(e.getMessage(), null));
+		}
+		
+		return ResponseEntity.ok()
+				.body(new UserDetailsResponse(response,
+						extractionUtils.extractUserDetailsForAdmin(user, accountService)));
 	}
 
 
 	@Override
-	public UserDetailsForAdmins addNewAccountToUser(
+	public ResponseEntity<UserDetailsResponse> addNewAccountToUser(
 			AddAccountToUserRequest addAccountToUserRequest, Long userId) throws CustomExceptions, IOException {
 		
-		User userDetails = userRepo.findById(userId).get();		
-		List <NotificationMedia> notificationMedia = addAccountToUserRequest.getNotificationMedia();
-		List<Card> cards = addAccountToUserRequest.getCards();
-		Account accountDetails = addAccountToUserRequest.getAccount();
+		User userDetails = null;
 		
-		additionSetterUtils.newAccountSetters(
-				accountDetails, userId, userDetails.getFullName(), notificationMedia, cards, response);
-		
-		accountRepo.save(accountDetails);
-		userDetails.getACCOUNTS().forEach(account -> {
-			account.getCards().forEach(card -> {
-				card.setFk_account_no(account.getAccountNo());
+		try {
+			userDetails = userRepo.findById(userId).get();	
+			List <NotificationMedia> notificationMedia = addAccountToUserRequest.getNotificationMedia();
+			List<Card> cards = addAccountToUserRequest.getCards();
+			Account accountDetails = addAccountToUserRequest.getAccount();
+			
+			additionSetterUtils.newAccountSetters(
+					accountDetails, userId, userDetails.getFullName(), notificationMedia, cards, response);
+			
+			accountRepo.save(accountDetails);
+			userDetails.getACCOUNTS().forEach(account -> {
+				account.getCards().forEach(card -> {
+					card.setFk_account_no(account.getAccountNo());
+				});
 			});
-		});
+			
+		} catch (Exception e) {
+			return ResponseEntity.status(200).body(new UserDetailsResponse(e.getMessage(), null));
+		}
 		
-		return extractionUtils.extractUserDetailsForAdmin(userDetails, accountService);
+		
+		
+		return ResponseEntity.ok()
+				.body(new UserDetailsResponse("Acount Added to User SUCCESSFULLY",
+						extractionUtils.extractUserDetailsForAdmin(userDetails, accountService)));
 	}	
 
 }
