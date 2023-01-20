@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import sirdarey.dto.AddRolesToAdminDTO;
 import sirdarey.dto.AdminDetailsResponse;
@@ -19,7 +20,6 @@ import sirdarey.repo.RoleRepo;
 import sirdarey.utils.Utils;
 
 @Service
-@Transactional
 public class SuperAdminService {
 
 	@Autowired private AdminRepo adminRepo;
@@ -38,7 +38,8 @@ public class SuperAdminService {
 	}
 
 	public ResponseEntity<AllAdminsDTO> getAllAdmins() {
-		List<Admin> allAdmins = adminRepo.findAll();
+		//Sorting by adminId in DESC order
+		List<Admin> allAdmins = adminRepo.findAll(Sort.by(Direction.DESC, "adminId"));		
 		List<AnAdminDTO> response = new ArrayList<>();
 		
 		allAdmins.forEach(admin -> {

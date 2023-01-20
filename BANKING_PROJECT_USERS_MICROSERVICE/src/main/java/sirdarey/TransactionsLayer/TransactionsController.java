@@ -26,7 +26,7 @@ public class TransactionsController {
 	//PURCHASE AIRTIME (SELF OR THIRD PARTY)
 	
 	@PostMapping("/airtime")
-	public ResponseEntity<TransactionsResponseDTO> requestAirtime (@RequestBody AirtimeRequestDTO airAirtimeRequest)  {
+	public ResponseEntity<TransactionsResponseDTO> requestAirtime (@RequestBody AirtimeRequestDTO airAirtimeRequest) throws Exception  {
 		return airtimeRequestService.requestAirtime(airAirtimeRequest);
 	}
 	

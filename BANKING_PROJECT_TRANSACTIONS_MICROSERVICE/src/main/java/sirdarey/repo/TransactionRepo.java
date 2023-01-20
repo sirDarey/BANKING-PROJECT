@@ -14,8 +14,10 @@ public interface TransactionRepo extends JpaRepository<TransactionEntity, Long>{
 	@Query (value = "select new sirdarey.dto.TransactionsHistory"
 			+ "(t.transactionType, t.transactionAmount, t.transactionDesc, "
 			+ "t.balance, t.transactionDateAndTime) from TransactionEntity t where t.accountNo=?1 and "
-			+ "t.transactionDateAndTime between ?2 and ?3 order by t.transactionDateAndTime desc")
-	List<TransactionsHistory> getAllTransactions(Long accountNo, Date startDate, Date endDate);
+			+ "t.transactionDateAndTime between ?2 and ?3 order by t.transactionDateAndTime desc "
+			+ "limit ?4 offset ?5")
+	List<TransactionsHistory> getAllTransactions(
+			Long accountNo, Date startDate, Date endDate, int limit, int offset);
 
 	
 	@Query(nativeQuery = true,

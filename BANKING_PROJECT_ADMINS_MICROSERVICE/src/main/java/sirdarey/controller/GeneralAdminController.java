@@ -31,12 +31,12 @@ public class GeneralAdminController {
 	@Autowired private RestTemplate restTemplate;
 	
 	private final String DEPOSIT_REQUEST = "http://localhost:8002/bank/transactions/deposit";
-	private final String TRANSACTIONS_HISTORY_REQUEST = "http://localhost:8002/bank/transactions/history";
+	private final String TRANSACTIONS_HISTORY_REQUEST = "http://localhost:8002/bank/transactions/history?limit={limit}&page={page}";
 	private final String WITHDRAW_REQUEST = "http://localhost:8002/bank/transactions/withdraw";
 	private final String USER_DETAILS_REQUEST = "http://localhost:8001/bank/users/{userId}/admin";
 	private final String NEW_USER_REQUEST = "http://localhost:8001/bank/users";
-	private final String UPDATE_USER_NAME_REQUEST = "http://localhost:8001/bank/users/{userId}/updateonlyname?newName=";
-	private final String UPDATE_USER_ENABLE_STATUS_REQUEST = "http://localhost:8001/bank/users/{userId}/enablestatus?enable=";
+	private final String UPDATE_USER_NAME_REQUEST = "http://localhost:8001/bank/users/{userId}/updateonlyname?newName={newName}";
+	private final String UPDATE_USER_ENABLE_STATUS_REQUEST = "http://localhost:8001/bank/users/{userId}/enablestatus?enable={enable}";
 	private final String ADD_ACCOUNT_TO_USER_REQUEST = "http://localhost:8001/bank/users/{userId}/newaccount";
 	
 	
@@ -62,9 +62,11 @@ public class GeneralAdminController {
 	
 	@PostMapping ("/transactionshistory")
 	public ResponseEntity<TransactionsHistoryResponseDTO> 
-		transactionHistory (@RequestBody TransactionsHistoryRequestDTO request) {
+		transactionHistory (@RequestBody TransactionsHistoryRequestDTO request,
+				@RequestParam(defaultValue = "2") int limit, 
+				@RequestParam(defaultValue = "2") int page) {
 		
-		return restTemplate.postForEntity(TRANSACTIONS_HISTORY_REQUEST, request, TransactionsHistoryResponseDTO.class);		
+		return restTemplate.postForEntity(TRANSACTIONS_HISTORY_REQUEST, request, TransactionsHistoryResponseDTO.class, limit, page);		
 	}
 	
 	
@@ -101,7 +103,7 @@ public class GeneralAdminController {
 	public ResponseEntity<UserDetailsResponse> updateOnlyName (
 			@RequestParam String newName, @PathVariable Long userId) {
 
-		return restTemplate.getForEntity(UPDATE_USER_NAME_REQUEST+newName, UserDetailsResponse.class, userId);	
+		return restTemplate.getForEntity(UPDATE_USER_NAME_REQUEST, UserDetailsResponse.class, userId, newName);	
 	}
 	
 	
@@ -111,7 +113,7 @@ public class GeneralAdminController {
 	public ResponseEntity<UserDetailsResponse> updateEnableStatus (
 			@RequestParam Boolean enable, @PathVariable Long userId) {
 		
-		return restTemplate.getForEntity(UPDATE_USER_ENABLE_STATUS_REQUEST+enable, UserDetailsResponse.class, userId);
+		return restTemplate.getForEntity(UPDATE_USER_ENABLE_STATUS_REQUEST, UserDetailsResponse.class, userId, enable);
 	}
 	
 	//ADD NEW ACCOUNT TO  A USER

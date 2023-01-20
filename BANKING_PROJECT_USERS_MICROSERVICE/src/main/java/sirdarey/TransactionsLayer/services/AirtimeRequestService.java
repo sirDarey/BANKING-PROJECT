@@ -3,6 +3,7 @@ package sirdarey.TransactionsLayer.services;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,15 +13,16 @@ import sirdarey.TransactionsLayer.GenericResponse;
 import sirdarey.TransactionsLayer.TransactionDetails;
 import sirdarey.TransactionsLayer.TransactionsResponseDTO;
 import sirdarey.repo.AccountRepo;
+import sirdarey.utils.Utils;
 
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class AirtimeRequestService {
 
 	@Autowired private AccountRepo accountRepo;
+	@Autowired private Utils utils;
 	
-	
-	public ResponseEntity<TransactionsResponseDTO> requestAirtime(AirtimeRequestDTO airAirtimeRequest) {
+	public ResponseEntity<TransactionsResponseDTO> requestAirtime(AirtimeRequestDTO airAirtimeRequest) throws Exception {
 		
 		Long accountNo = airAirtimeRequest.getAccountNo();
 		Double transactionAmount = airAirtimeRequest.getTransactionAmount();
@@ -62,7 +64,13 @@ public class AirtimeRequestService {
 					new Date(System.currentTimeMillis()))				
 				);
 		
-		return ResponseEntity.status(201).body(response);
+		HttpStatus savedStatus = utils.saveTransaction(response);
+		
+		if (savedStatus.equals(HttpStatus.CREATED))
+			return ResponseEntity.status(201).body(response);
+		else
+			throw new Exception("UNABLE TO SAVE TRANSACTION");
+		
 	}
-
+	
 }

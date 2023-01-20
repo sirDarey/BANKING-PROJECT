@@ -10,7 +10,11 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create
-    
+      ddl-auto: none
+      
+logging:
+  level:
+    '[org.springframework]': debug
+    #logging.level.org.springframework=DEBUG
 #  main:
 #    allow-circular-references: true

@@ -3,10 +3,12 @@ package sirdarey.controller;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -52,11 +54,12 @@ public class TransactionController {
 			response =  restTemplate.postForEntity(
 					VALIDATE_AIRTIME_REQUEST, airtimeRequest, TransactionsResponseDTO.class);
 		} catch (Exception e) {
-			throw new CustomExceptions(e.getMessage());
+			return ResponseEntity.status(200)
+					.body(new TransactionsResponseDTO(e.getMessage(), null));
 		}
 		
-		if(response.getStatusCode().value() == 201) 
-			transactionService.saveNewTransaction(response.getBody()); 
+//		if(response.getStatusCode().value() == 201) 
+//			transactionService.saveNewTransaction(response.getBody()); 
 
 		return response;
 	}
@@ -120,7 +123,8 @@ public class TransactionController {
 
 	@PostMapping ("/history")
 	public ResponseEntity<TransactionsHistoryResponseDTO> 
-	transactionHistory (@RequestBody TransactionsHistoryRequestDTO request) throws CustomExceptions {
+	transactionHistory (@RequestBody TransactionsHistoryRequestDTO request,
+			@RequestParam(defaultValue = "2") int limit, @RequestParam(defaultValue = "2") int page) throws CustomExceptions {
 		
 		Long accountNo = request.getAccountNo();
 		Date startDate = request.getStartDate();
@@ -157,7 +161,8 @@ public class TransactionController {
 		
 		ResponseEntity<TransactionsHistoryResponseDTO> response;
 		try {
-			response =  transactionService.getAllTransactions(accountNo, startDate, endDate, accountName);;
+			response =  transactionService.getAllTransactions(accountNo, startDate, endDate, accountName,
+					limit, page);
 		} catch (Exception e) {
 			throw new CustomExceptions(e.getMessage());
 		}
@@ -229,6 +234,18 @@ public class TransactionController {
 			transactionService.saveNewTransaction(response.getBody()); 
 
 		return response;		
+	}
+	
+	@PostMapping("/save") 
+	public HttpStatus saveNewTransaction (@RequestBody TransactionsResponseDTO response) {
+		
+		try {
+			transactionService.saveNewTransaction(response); 
+			return HttpStatus.CREATED;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return HttpStatus.EXPECTATION_FAILED;
+		}
 	}
 		
 }

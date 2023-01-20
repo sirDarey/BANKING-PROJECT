@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import sirdarey.dto.AccountHeader;
 import sirdarey.dto.TransactionDetails;
@@ -22,6 +24,8 @@ public class TransactionService {
 	@Autowired private TransactionRepo transactionRepo;
 	@Autowired private Utils utils;
 	
+
+	//@Transactional (propagation = Propagation.MANDATORY)
 	public void saveNewTransaction (TransactionsResponseDTO response) {
 		
 		TransactionDetails transactionDetails = response.getTransactionDetails();
@@ -42,14 +46,13 @@ public class TransactionService {
 	
 	
 	public ResponseEntity<TransactionsHistoryResponseDTO> 
-		getAllTransactions(Long accountNo, Date startDate, Date endDate, String accountName) {
+		getAllTransactions(Long accountNo, Date startDate, Date endDate, String accountName, int limit, int page) {
 		
 		String getEndDate = endDate.toString();
 		endDate.setTime(endDate.getTime()+ (1000*60*60*24));
-		
+	
 		List<TransactionsHistory> transanctionsList = 
-				transactionRepo.getAllTransactions(accountNo, startDate, endDate);
-		
+				transactionRepo.getAllTransactions(accountNo, startDate, endDate, limit, (page-1)*limit);
 		AccountHeader accountHeader = new AccountHeader(accountNo, accountName, 
 						startDate.toString() +" -> "+ getEndDate);
 		
