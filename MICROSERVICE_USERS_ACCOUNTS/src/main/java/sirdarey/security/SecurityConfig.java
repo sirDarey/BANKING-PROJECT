@@ -25,10 +25,7 @@ public class SecurityConfig {
 		http
 			.csrf().disable()
 			.authorizeHttpRequests()
-			.requestMatchers("/auth/**", "/api/token/**", "/bank/**").permitAll()
-//			.requestMatchers(HttpMethod.POST,  "/bank/admins/newuser").permitAll()
-//			.requestMatchers(HttpMethod.GET, "/bank/users/{userId}").hasAnyAuthority("ROLE_USER")
-//			.requestMatchers("/bank/users/{userId}/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_SUPERADMIN", "ROLE_MANAGER")
+			.requestMatchers("/auth/**", "/bank/**").permitAll()
 			.anyRequest()
 			.authenticated()
 			.and()

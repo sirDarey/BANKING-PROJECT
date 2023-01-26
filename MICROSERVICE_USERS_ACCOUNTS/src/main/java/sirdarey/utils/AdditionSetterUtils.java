@@ -14,8 +14,7 @@ import sirdarey.notification.NotificationMedia;
 
 public class AdditionSetterUtils {
 	
-	@Autowired
-	private Utils utils;
+	@Autowired private Utils utils;
 
 	public void newCardSetters (Card card, String accountName) {
 		card.setCardNo(utils.generateRandom(15));
@@ -48,7 +47,7 @@ public class AdditionSetterUtils {
 		accountDetails.setAccountName(accountName);
 		accountDetails.setAccLocked((byte) 0);
 		accountDetails.setBalance(0.0);
-		accountDetails.setTransactionPIN(1234);  //DEFAULT AND STATIC
+		accountDetails.setTransactionPIN(1234);  //DEFAULT AND STATIC; should be encrypted
 		if (userId != null)
 			accountDetails.setFk_user_id(userId);
 		accountDetails.setAccountNo(utils.generateRandom(9));

@@ -1,6 +1,5 @@
 package sirdarey.security;
 
-import java.io.IOException;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -18,7 +17,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import jakarta.servlet.http.HttpServletResponse;
 
 @Service
 public class JWTService {
@@ -62,12 +60,12 @@ public class JWTService {
 		return tokens;
 	}
 	
-	public Boolean isTokenValid (String token, UserDetails userDetails, HttpServletResponse response) throws IOException {
+	public Boolean isTokenValid (String token, UserDetails userDetails) {
 		final String username = extractUsername(token);
-		return username.equals(userDetails.getUsername()) && !isTokenExpired(token, response);
+		return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
 	}
 	
-	private boolean isTokenExpired(String token, HttpServletResponse response) throws IOException {
+	private boolean isTokenExpired(String token) {
 		return extractExpiration(token).before(new Date());			
 	}
 

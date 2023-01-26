@@ -37,7 +37,6 @@ public class UserController {
 	@Autowired private TransferRequestService transferRequestService;
 	@Autowired private WithdrawalRequestService withdrawalRequestService;
 	
-	
 	/************************ ACTIONS BY A USER ******************************/
 	
 	//GET User By UserID For User

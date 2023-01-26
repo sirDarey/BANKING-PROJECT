@@ -21,14 +21,10 @@ import sirdarey.utils.Utils;
 @Service
 public class NewUserRequestService {
 	
-	@Autowired
-	private UserService userService;
-	@Autowired
-	private Utils utils;
-	@Autowired
-	private AdditionSetterUtils additionSetterUtils;
-	@Autowired
-	private HttpServletResponse response;
+	@Autowired private UserService userService;
+	@Autowired private Utils utils;
+	@Autowired private AdditionSetterUtils additionSetterUtils;
+	@Autowired private HttpServletResponse response;
 	
 	public ResponseEntity<UserDetailsResponseDTO> addUser(NewUserRequestDTO newUser) throws CustomExceptions, IOException {
 		
